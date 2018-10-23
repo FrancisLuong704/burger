@@ -5,7 +5,7 @@
     {{#unless devoured}}
     <p>
         {{this.id}}. {{this.burger_name}}
-        <button data-id="{{this.id}}" class="devour">DEVOUR BURGER!</button>
+        <button data-id="{{this.id}}" data-devoured="{{this.devoured}}" type="button" class="devour">DEVOUR BURGER!</button>
     </p>
     {{/unless}}
     {{/each}}
@@ -26,7 +26,7 @@
 <h2>Make a Burger</h2>
 <form id="makeBurger" class="button-size">
     <textarea type="text" name="burger"></textarea>
-    <button type="submit">BURGER!</button>
+    <button type="submit">MAKE A BURGER!</button>
 </form>
 {{!-- this is gonna grab the id/ --}}
 <script type="text/javascript">
@@ -49,13 +49,22 @@
     });
 
     //this is gonna make it so the burger is devoured(true)
-    $(".devour").on("click", function () {
-        event.preventDefault();
+    $(".devour").on("click", function (event) {
 
-        var devoured = "id = " + req.params.id;
+        var id = $(this).data("id");
+        console.log(id);
 
-        console.log("devoured", devoured);
+        var newDevouredState = {
+            devoured: true
+        };
 
-        
-    })
+        $.ajax("/" + id, {
+            type: "PUT",
+            data: newDevouredState
+        }).then(function () {
+            console.log("Ate Burger! YUM!");
+            //reload page
+            location.reload();
+        });
+    });
 </script>
