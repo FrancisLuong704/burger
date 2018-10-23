@@ -1,0 +1,61 @@
+<h1>EAT DAT BURGER</h1>
+{{!-- show each burger index and give it a button with an data-id attached to it so you can grab it later --}}
+<ul>
+    {{#each burgers}}
+    {{#unless devoured}}
+    <p>
+        {{this.id}}. {{this.burger_name}}
+        <button data-id="{{this.id}}" class="devour">DEVOUR BURGER!</button>
+    </p>
+    {{/unless}}
+    {{/each}}
+</ul>
+
+<h1>Eaten Burgers</h1>
+{{!-- show each eaten burger --}}
+<ul>
+    {{#each burgers}}
+    {{#if devoured}}
+    <p>
+        {{this.id}}. {{this.burger_name}}
+    </p>
+    {{/if}}
+    {{/each}}
+</ul>
+{{!-- submit button towards making a burger. gave it an ID too --}}
+<h2>Make a Burger</h2>
+<form id="makeBurger" class="button-size">
+    <textarea type="text" name="burger"></textarea>
+    <button type="submit">BURGER!</button>
+</form>
+{{!-- this is gonna grab the id/ --}}
+<script type="text/javascript">
+    //this is gonna update the database and add a new burger in
+    $("#makeBurger").on("submit", function (event) {
+        event.preventDefault();
+
+        var newBurger = {
+            burger: $("#makeBurger [name=burger]").val().trim()
+        };
+
+        $.ajax("/burgers", {
+            type: "POST",
+            data: newBurger
+        }).then(function () {
+            console.log("Made New Burger!");
+            //reload page
+            location.reload();
+        });
+    });
+
+    //this is gonna make it so the burger is devoured(true)
+    $(".devour").on("click", function () {
+        event.preventDefault();
+
+        var devoured = "id = " + req.params.id;
+
+        console.log("devoured", devoured);
+
+        
+    })
+</script>
